@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [landingRole, setLandingRole] = useState('buyer');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -21,13 +22,12 @@ export default function LoginPage() {
         email,
         password,
         redirect: false,
-        callbackUrl: '/',
       });
 
       if (res?.error) {
         setError('Invalid email or password');
       } else {
-        router.replace('/');
+        router.replace('/' + landingRole);
       }
     } catch (err) {
       setError('An unexpected error occurred. Please try again.');
@@ -51,6 +51,23 @@ export default function LoginPage() {
         )}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="landing-role" className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
+              Landing Dashboard
+            </label>
+            <select
+              id="landing-role"
+              disabled={loading}
+              value={landingRole}
+              onChange={(e) => setLandingRole(e.target.value)}
+              className="h-10 px-2 border border-zinc-200 rounded text-sm text-zinc-900 focus:outline-none focus:border-zinc-950 bg-white disabled:opacity-50"
+            >
+              <option value="admin">Admin Dashboard</option>
+              <option value="seller">Seller Dashboard</option>
+              <option value="buyer">Buyer Dashboard</option>
+            </select>
+          </div>
+
           <div className="flex flex-col gap-1.5">
             <label htmlFor="email" className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
               Email Address
