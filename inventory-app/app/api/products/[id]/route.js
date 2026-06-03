@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export async function GET(request, { params }) {
-  const { id } = params;
+  const { id } = await params;
 
   const rows = await sql`
     SELECT p.*, u.name AS seller_name
@@ -25,7 +25,7 @@ export async function PUT(request, { params }) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const { id } = params;
+  const { id } = await params;
   const body = await request.json();
   const { name, description, sku, category, quantity, unit_type, price_per_base_unit, is_active } = body;
 
@@ -57,7 +57,7 @@ export async function DELETE(request, { params }) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const { id } = params;
+  const { id } = await params;
 
   await sql`
     UPDATE products SET is_active = false
